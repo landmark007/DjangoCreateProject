@@ -17,6 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from ecommerce import views as ecom
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('ecommerce/', ecom.index),
+    path('ecommerce/<int:item_id>/<str:name>', ecom.input),
 ]

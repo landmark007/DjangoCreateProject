@@ -14,3 +14,6 @@ def input(request, item_id, name):  # เพิ่มพารามิเตอ
     #     "item_id": item_id
     # }
     # return render(request, 'index.html', context = context_data)
+
+def table(request):
+    return render(request, 'table.html')

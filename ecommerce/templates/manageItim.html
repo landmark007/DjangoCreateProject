@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บันทึกรายการสินค้า</title>
+    <style>
+        table, th, td {
+            /* width: 100%; */
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: auto auto auto auto auto auto;
+            gap: 5px;
+        }
+
+        .content > div {
+            background-color: rgb(125, 194, 211);
+            padding: 10px;
+        }
+
+        .tableResult {
+            background-color: #00BCD4;
+            grid-column: 2/7;
+            margin: 0 auto;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>DreamLLK7</h1>
+    <div class="content">
+        <div class="member">member</div>
+        <div class="tableResult">
+            <!-- <table>
+                <tr>
+                    <th>Type Itim</th>
+                    <th>Itim Old</th>
+                    <th>Itim New</th>
+                    <th>Itim Total</th>
+                    <th>Itim Balance</th>
+                    <th>Sold Out</th>
+                    <th>Piece</th>
+                    <th>Money</th>
+                </tr>
+            </table> -->
+            {% block table %}
+            {% endblock %}
+        </div>
+        <div class="member1">member1</div>
+        <div class="member2">member2</div>
+        <div class="member3">member3</div>
+        <div class="member4">member4</div>
+        <div class="member5">member5</div>
+        <div class="member5">member6</div>
+    </div>
+</body>
+</html>

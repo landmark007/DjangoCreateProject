@@ -17,3 +17,6 @@ def input(request, item_id, name):  # เพิ่มพารามิเตอ
 
 def table(request):
     return render(request, 'table.html')
+
+def manageItim(request):
+    return render(request, 'manageItim.html')

@@ -15,7 +15,7 @@
 
         .content {
             display: grid;
-            grid-template-columns: auto auto auto auto auto auto;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
             gap: 5px;
         }
 
@@ -26,8 +26,7 @@
 
         .tableResult {
             background-color: #00BCD4;
-            grid-column: 2/7;
-            margin: 0 auto;
+            grid-column: span 5;
         }
 
     </style>
@@ -37,8 +36,10 @@
     <div class="content">
         <div class="member">member</div>
         <div class="tableResult">
-            {% block table %}
-            {% endblock %}
+            <div>
+                {% block table %}
+                {% endblock %} 
+            </div>
         </div>
         <div class="member1">member1</div>
         <div class="member2">member2</div>

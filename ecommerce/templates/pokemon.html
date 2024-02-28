@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #content {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #name {
+            font-size: 24px;
+            color: #333;
+        }
+        #imgPoke {
+            max-width: 200px;
+            margin-top: 10px;
+            visibility: hidden;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="contentPokemon">
+        <label>POKEMON1</label>
+        <form id="formSearch">
+            <input id="namePokemon" type="text">
+            <input type="submit">
+            <button id="listPoke" type="button" style="">List Pokemon</button>
+        </form>
+    
+        <div id="content">
+            <h1 id="name"></h1>
+            <img id="imgPoke" style="visibility: hidden" src="" alt="Img Pokemon">
+        </div>
+    </div>
+
+    <div class="contentDigimon" style="">
+        <label style="">DIGIMON API</label>
+        <form id="searchDigi" style="">
+            <input id="inputDigi" type="search" style=""> 
+            <button id="listDigi" type="button" style="">List Total</button>
+        </form>
+        <div class="displayDigi" style="">
+            <h1 id="nameDigi" style=""></h1>
+            <img id="imgDigi" style="visibility: hidden" src="" alt="Img Digi">
+        </div>
+    </div>
+
+</body>
+</html>
+
+
+
+<script>
+    async function getPokemon(name){
+        let url = `https://pokeapi.co/api/v2/pokemon/${name}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error('Network error');
+        }
+        const data = await response.json();
+        return data;
+    }
+
+    document.getElementById('searchDigi').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const inputValue = document.getElementById('inputDigi').value;
+        const url = 'https://digimon-api.vercel.app/api/digimon'
+        try {
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network error');
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    // console.log(data)
+                    const displayDiv = document.querySelector('.displayDigi');
+                    const ulElement = document.createElement('ul');
+                    ulElement.id = 'digimonList'; // Set the id attribute
+
+                    const result = data.findIndex((value) => value.name == inputValue.toString());
+                    if (result > -1){
+                        document.getElementById('nameDigi').innerHTML = data[result].name   
+                        document.getElementById('imgDigi').src =  data[result].img
+                        document.getElementById('imgDigi').style.visibility = "visible";
+                    }else{
+                        console.log('Digimon not found');
+                        document.getElementById('nameDigi').innerHTML = 'Not found';
+                        document.getElementById('imgDigi').src =  '' // Display 'Not found' if the digimon is not found
+                    }             
+                })
+        } catch (error) {
+            console.error('Error getting Digimon:', error);
+            document.getElementById('nameDigi').innerHTML('Not found');
+        }
+    })
+
+    let pokemonDataFetched = false;
+    document.getElementById('listPoke').addEventListener('click', async function(e) {
+        e.preventDefault();
+        const url = `https://pokeapi.co/api/v2/pokemon?limit=1000&offset=0`;
+        if (pokemonDataFetched) {
+            return
+        }
+        fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network error');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const displayDiv = document.querySelector('#content');
+            const ulElement = document.createElement('ul');
+            ulElement.id = 'pokeList';
+
+            ulElement.style.display = 'grid';
+            ulElement.style.gridTemplateColumns = 'repeat(6, 1fr)';
+            ulElement.style.gap = '10px';
+
+            data.results.forEach(pokemon => {
+                const listItem = document.createElement('li');
+                listItem.textContent = pokemon.name;
+                ulElement.appendChild(listItem);
+            });
+            displayDiv.appendChild(ulElement);
+            pokemonDataFetched = true;
+        })
+        .catch(error => {
+            console.error('Error fetching Pokemon:', error);
+        });
+        
+    });
+
+    let digimonDataFetched = false;
+    document.getElementById('listDigi').addEventListener('click', async function(event) {
+        event.preventDefault();
+
+        const url = 'https://digimon-api.vercel.app/api/digimon'
+        try {
+            if (digimonDataFetched) {
+                return
+            }
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network error');
+                    }
+                    return response.json()
+                })
+                .then(data => {
+                    const displayDiv = document.querySelector('.displayDigi');
+                    const ulElement = document.createElement('ul');
+                    ulElement.id = 'digimonList'; // Set the id attribute     
+                    
+                    ulElement.style.display = 'grid';
+                    ulElement.style.gridTemplateColumns = 'repeat(5, 1fr)';
+                    ulElement.style.gap = '10px';
+
+                    //List digimon
+                    data.forEach(digimon => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = digimon.name;
+                        ulElement.appendChild(listItem);
+                    });
+                    // Append the ul element to the displayDiv
+                    displayDiv.appendChild(ulElement);
+                    digimonDataFetched = true
+                })
+        } catch (error) {
+            console.error('Error getting Digimon:', error);
+            document.getElementById('nameDigi').innerHTML('Not found');
+        }
+    })
+
+    document.getElementById('formSearch').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Prevent form submission
+        const pokemonName = document.getElementById('namePokemon').value.toLowerCase();
+        try {
+            const pokemonData = await getPokemon(pokemonName);
+            // console.log(pokemonData);
+            document.getElementById('name').innerHTML = pokemonData.name;
+            document.getElementById('imgPoke').src = pokemonData.sprites.front_default;
+            document.getElementById('imgPoke').style.visibility = "visible";
+        } catch (error) {
+            console.error('Error getting Pokemon:', error);
+            document.getElementById('name').innerHTML('Not found');
+        }
+    });
+</script>

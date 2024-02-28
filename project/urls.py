@@ -24,5 +24,5 @@ urlpatterns = [
     path('', ecom.table),
     path('ecommerce/', ecom.index),
     path('ecommerce/<int:item_id>/<str:name>', ecom.input),
-    path('manageItim/', ecom.manageItim),
+    path('pokemon/', ecom.pokemon),
 ]
